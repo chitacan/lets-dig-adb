@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>adb 파헤치기</title>
+  <meta name="author" content="chitacan">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/activity.css">
+  <link rel="stylesheet" href="css/theme/chitacan.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/atelier-seaside.light.css">
+
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <!-- 
+  <script>
+    document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  -->
+
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <h1 style="-webkit-app-region: drag">ADB 파헤치기</h1>
+        <p><a href="https://plus.google.com/communities/100903743067544956282">GDG Korea Android</a> Conf. <img src="img/sparkling_heart.png" class="emoji"></p>
+        <small>by
+          <a href="https://github.com/chitacan" class="roll">chitacan</a>
+        </small>
+      </section>
+
+      <section>
+        <h2>About Me</h2>
+        <ul>
+          <li><a href="https://github.com/chitacan">@chtacan</a></li>
+          <li>android, node.js, github, chrome</li>
+          <li>다양한 mobile & web tech</li>
+          <li>how it works?</li>
+          <li>내가 원하는 것을 만들 수 있는 능력</li>
+          <li>Ahnlab</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>안드로이드 앱을 개발한다구요?</p>
+        <h2>그럼 ADB 쓰시는 겁니다.</h2>
+        <ul>
+          <li>로그 가져오기</li>
+          <li>디버거 연결하기</li>
+          <li>앱 설치하기</li>
+          <li>쉘에 붙어보기</li>
+        </ul>
+      </section>
+
+      <section class="stack">
+        <section>
+          <h2>다루는 것</h2>
+          <ul>
+            <li>ADB? 왜?(동기부여)</li>
+            <li>ADB 기능, 구성, 프로토콜</li>
+            <li>ADB 확장하기</li>
+          </ul>
+        </section>
+        <section>
+          <h2>다루는 않는 것</h2>
+          <ul>
+            <li>ADB 코드 분석</li>
+            <li>ADB 명령어</li>
+            <li>머리로만 이해하기</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <h2>시작하기 전에</h2>
+      </section>
+
+      <section class="stack">
+        <section>
+          <h1>adb ?</h1>
+          <p>Android Debug Bridge</p>
+          <ul>
+            <li>개발 머신과 안드로이드 기반의 단말을 연결</li>
+            <li>멀티 플랫폼 소켓 포워딩 서버</li>
+            <li>로그, 디버거 연결, 앱설치, 쉘, 파일 가져오기 등등</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>왜 ADB에 대해서 알아야 되나요?</h2>
+          <p>도구 주도 분석</p>
+          <ul>
+            <li>시스템에 접근하고 디버깅할 수 있는 도구를 익히고</li>
+            <li>시스템과 도구가 맞닿는 부분의 코드를 중심으로 분석</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>왜 ADB에 대해서 알아야 되나요?</h2>
+          <ul>
+            <li>원하는 결과를 즉시 확인할 수 있다.</li>
+            <li>텍스트 기반</li>
+            <li>나만의 도구로 확장하기 쉽다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>원하는 결과를 즉시 확인</h2>
+          <pre><code class="shell">
+ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+List&lt;RunningTaskInfo&gt; info = activityManager.getRunningTasks(1);
+ComponentName topActivity = info.get(0).topActivity;
+          </code></pre>
+          <video src="img/instant.webm" controls></video>
+        </section>
+
+        <section>
+          <h2>텍스트 기반</h2>
+          <video src="img/multi.webm" controls></video>
+        </section>
+
+        <section>
+          <h2>나만의 도구로 확장하기 쉽다.</h2>
+          <pre><code class="javascript" style="max-height:300px;">
+    var net = require('net');
+    var cmds = [{
+        cmd : 'host:transport-any',
+        expect : function(res) { return 'OKAY' === res; }
+      }, {
+        cmd : 'localabstract:chrome_devtools_remote',
+        expect : function(res) { return 'OKAY' === res; }
+      }, {
+        cmd : 'GET /json HTTP/1.1\r\n\r\n',
+        expect : function(res) { return true; }
+      }]
+     
+    function prefixLen(cmd) {
+      var hexlen = cmd.length.toString(16);
+      var prefix = ('000'.concat(hexlen)).slice(-4);
+      return prefix.concat(cmd);
+    }
+     
+    var socket = new net.Socket({
+      readable : true,
+      writable : true,
+      allowHalfOpen : true
+    });
+     
+    socket.writeData = function() {
+      var data = this.cmds.shift();
+      if (!data) return;
+     
+      this.expect = data.expect;
+      this.write(prefixLen(data.cmd));
+    }
+     
+    socket.writeNext = function(res) {
+      if (this.expect && this.expect(res))
+        this.writeData();
+    }
+     
+    socket.connect({port: '5037'}, function() {
+      this.cmds = cmds;
+      this.writeData();
+      this.on('data', function(chunk) {
+        var res = chunk.toString();
+        console.log(res);
+        this.writeNext(res);
+      });
+      this.on('drain', function() {
+        console.log('drain');
+      });
+      this.on('end', function() {
+        console.log('FIN');
+      });
+    });
+          </code></pre>
+          <pre><code class="shell" style="max-height:150px;">
+  $ node script.js
+
+  OKAY
+  OKAY
+  HTTP/1.1 200 OK
+  Content-Length:427
+  Content-Type:application/json; charset=UTF-8
+
+  [ {
+     "description": "",
+     "devtoolsFrontendUrl": "http://chrome-devtools-frontend.appspot.com/serve_rev/@178307/devtools.html?ws=/devtools/page/12",
+     "faviconUrl": "https://assets-cdn.github.com/favicon.ico",
+     "id": "12",
+     "thumbnailUrl": "/thumb/12",
+     "title": "GitHub · Build software better, together.",
+     "type": "page",
+     "url": "https://github.com/",
+     "webSocketDebuggerUrl": "ws:///devtools/page/12"
+  } ]
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>왜 ADB에 대해서 알아야 되나요?</h2>
+          <p>거대한 안드로이드 시스템을 좀 더 쉽게 탐험할 수 있습니다.</p>
+          <p>쉽게 탐험할 수 있게 도와주는 기능들을 이해해 봅시다.</p>
+          adb 를 응용하고 확장하는데 필요한 것들을 파헤쳐 보자.
+        </section>
+      </section>
+
+      <section class="stack">
+        <section>
+          <h1>ADB 구성</h1>
+          <ul>
+            <li>adb client</li>
+            <li>adb server</li>
+            <li>adbd</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>adb 구성</h2>
+          <p>그림 추가</p>
+        </section>
+
+        <section>
+          <h2>특징</h2>
+          <ul>
+            <li>adb client / server 는 하나의 바이너리</li>
+            <pre><code class="shell">
+    # run server mode
+    $ adb -P 5037 fork-server server
+    # run client mode
+    $ adb devices
+            </code></pre>
+            <li>adb와 adbd 는 코드 베이스가 거의 같다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>코드</h2>
+          <p><a href="https://android.googlesource.com/platform/system/core/+/android-4.4.4_r1/adb/">https://android.googlesource.com</a></p>
+          <ul>
+            <li>epoll / select</li>
+            <li>프로토콜을 알고 있으면 도움이 됩니다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>프로토콜</h1>
+          <p>그림 추가</p>
+        </section>
+
+        <section>
+          <h2>호스트 / 로컬 서비스</h2>
+          <ul>
+            <li>호스트 서비스 : adb server 에서 실행되는 명령어(adb device, forward)</li>
+            <li>로컬 서비스 : adbd 에서 실행되는 명령어(adb shell), 호스트 서비스 transport가 성공된 이후에 </li>
+          </ul>
+          <p>그림 추가</p>
+        </section>
+
+        <section>
+          <h2>transport</h2>
+          <p>호스트와 단말의 소켓을 연결하기</p>
+          <ul>
+            <li>transport 서비스</li>
+            <li>adb forward</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>transport 서비스</h2>
+          <p>다른 단말로 연결을 전환</p>
+          <p>연결된 2대의 단말에 shell 명령어 실행하기</p>
+        </section>
+
+        <section>
+          <h2>adb forward</h2>
+          <p>지속적인 연결을 원한다면 사용합시다.</p>
+          <p>adb forward tcp:6666 tcp:6666</p> 
+        </section>
+
+        <section>
+          <h2>adb forward</h2>
+          <p>다른 소켓으로 확장하기</p>
+          <ul>
+            <li>localfilesystem</li>
+            <li>localabstract</li>
+            <li>localreserved</li>
+            <li>dev</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>이걸 어디에 사용하고 있을까요?</h2>
+          <p>단말과 호스트 머신의 연결 통로</p>
+          <ul>
+            <li>devtools & mobile chrome</li>
+            <li>android & android wear</li>
+            <li>hierarchyviewer</li>
+            <li>java debugger</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>devtools & mobile chrome</h2>
+          <img src="img/remote-debug.png" alt="" style="box-shadow: none; ">
+        </section>
+
+        <section>
+          <h2>android & android wear</h2>
+        </section>
+
+        <section>
+          <h2>hierarchyviewer</h2>
+        </section>
+
+        <section>
+          <h2>java debugger</h2>
+        </section>
+
+        <section>
+          <h2>연결 살펴보기</h2>
+          <pre><code class="shell">
+      $ tcpdump -i lo0 -s0 -XA port 5037
+          </code></pre>
+          <pre><code class="shell">
+      $ adb shell cat /proc/net/unix | grep chrome
+      $ adb forward tcp:8000 localabstract:chrome_devtools_remote
+      $ telnet localhost:8000
+          </code></pre>
+        </section>
+
+      </section>
+
+      <section class="stack">
+        <section>
+          <h1>ADB 확장하기</h1>
+        </section>
+
+        <section>
+          <h2>adb client / server 연결은 쉽게 확장할 수 있습니다.</h2>
+          <p>그림</p> 
+          <ul>
+            <li>adbkit</li>
+            <li>ChromeADB</li>
+            <li>activitykit</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>adbkit</h2>
+          <p>adb를 node.js로 확장합시다.</p>
+          <pre><code class="javascript">
+    var adb = require('adbkit')
+    var client = adb.createClient()
+    var apk = 'some.apk'
+
+    client.listDevices()
+    .then(function(devices) {
+      return client.install(device.id, apk)
+    })
+    .then(function() {
+      console.log('Installed %s on all connected devices', apk)
+    })
+    .catch(function(err) {
+      console.error('Something went wrong:', err.stack)
+    })
+          </code></pre>
+          <small style="text-align:right; width: 90%;"><a href="https://github.com/CyberAgent/adbkit">https://github.com/CyberAgent/adbkit</a></small>
+        </section>
+
+        <section>
+          <h2>ChromeADB</h2>
+          <img src="img/chromeadb_screenshot.png" alt="" style="box-shadow: none; max-width:80%; max-height:80%; margin: 0px;">
+          <small style="text-align:right; width: 80%;">
+            <a href="https://github.com/importre/chromeadb">https://github.com/importre/chromeadb</a>
+          </small>
+        </section>
+
+        <section id="demo">
+          <div id="status"></div>
+        </section>
+
+        <section>
+          <h2>ADB over WiFi</h2>
+          <pre><code class="shell">
+    # connect device with usb
+    $ adb tcpip 6666
+    # disconnect usb
+    $ adb connect &lt;IP_ADDRESS&gt;:6666
+    connected to &lt;IP_ADDRESS&gt;:6666
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>adb connect?</h2>
+          <p>adb server와 adbd 연결하기</p> 
+        </section>
+
+        <section>
+          <h2>SSH Local Port Forwarding</h2>
+          <p>ssh 를 사용해 로컬의 포트와 서버의 포트를 연결하자</p>
+        </section>
+
+        <section>
+          <h2>ADB over local network</h2>
+          <p>다른 pc에 연결된 단말의 adbd에 접근할 수 있을까?</p>
+          <pre><code class="shell">
+    # on pc A
+    $ adb tcpip 6666
+    $ adb forward tcp:6666 tcp:6666
+    # on pc B
+    $ ssh -L 6666:localhost:6666 &lt;IP_ADDRESS_A&gt; -N
+    $ adb connect localhost:6666
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>ADB over local network</h2>
+          <p>다른 pc에 연결된 단말의 adb server에 접근하기</p>
+          <pre><code class="shell">
+    # on pc B
+    $ adb kill-server
+    $ ssh -L 5037:localhost:5037 &lt;IP_ADDRESS_A&gt; -N
+    $ adb connect localhost:6666
+          </code></pre>
+          <p>디버거는 사용불가...</p>
+        </section>
+
+        <section>
+          <h2>Crazy Connect</h2>
+          <p>원격지 가상머신 속 에뮬레이터의 adbd에 접근할 수 있을까?</p>
+          <p>미친거 같지만, 되긴 됩니다</p>
+        </section>
+
+        <section>
+          <h2>ADB over internet</h2>
+          <pre><code class="shell">
+# on pc A
+$ . build/envsetup.sh && emulator
+# on pc B
+$ ssh -L 5555:localhost:6666 chitacan@chitacan.dlinkddns.com -p 2020 -N
+$ adb connect localhost:6666
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>왜 이런짓을?</h2>
+          <ul>
+            <li>mac 에 단말을 연결하지 않아도 됩니다.(배터리 세이브)</li>
+            <li>emulator 를 맥에 실행하지 않아도 됩니다.</li>
+            <li>원하면 언제든지 AOSP 빌드를 수행할 수 있습니다.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <h2>Wrap Up</h2>
+        <ul>
+          <li>adb 왜?</li>
+          <li>adb 구성</li>
+          <li>adb 확장</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>이제,</h2>
+        <ul>
+          <li>adb 코드를 살펴보고, 즉시 확인</li>
+          <li>adb 를 확장해 나만의 도구를 만들자!!</li>
+          <li>장소에 관계없이 단말 / 에뮬레이터에 연결</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>한가지 더</h2>
+        <p>This presentation is fully Hackable !!</p>
+        <a href="https://github.com/chitacan/lets-dig-adb">https://github.com/chitacan/lets-dig-adb</a>
+      </section>
+
+     <section>
+       <h1 style="font-size:5em;">끝</h1>
+       <small style="color:darkgray;">Happy Hacking Android!</small>
+     </section>
+    </div>
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+  <script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      rollingLinks:true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+      backgroundTransition: 'slide',
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        {
+          src: 'lib/js/classList.js', 
+          condition: function() { 
+            return !document.body.classList;
+          } 
+        },
+        { 
+          src: 'plugin/markdown/showdown.js', 
+          condition: function() { 
+            return !!document.querySelector( '[data-markdown]' );
+          }
+        },
+        { 
+          src: 'plugin/markdown/markdown.js',
+          condition: function() { 
+            return !!document.querySelector( '[data-markdown]' );
+          }
+        },
+        { 
+          src: 'plugin/highlight/highlight.js', 
+          async: true, 
+          callback: function() {
+            hljs.initHighlightingOnLoad();
+          }
+        },
+        { 
+          src: 'activity.js', 
+          async: true, 
+          condition: function() {
+            return typeof module !== 'undefined'
+          }
+        },
+      ]
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "lets-dig-adb",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "grunt install"
+  },
+  "author": "chitacan",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "load-grunt-tasks": "*",
+    "grunt": "*",
+    "grunt-download-atom-shell": "*",
+    "grunt-shell": "*",
+    "activitykit": "git://github.com/chitacan/activitykit"
+  }
+}

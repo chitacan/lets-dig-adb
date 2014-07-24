@@ -1,0 +1,110 @@
+#status {
+  font-size: 1.5em;
+  font-weight: lighter;
+}
+
+svg {
+  font-size: .38em;
+  font-family: "RobotoDraft", sans-serif;
+  color: #444;
+  font-weight: 400;
+  margin: 0px;
+  height: 100%;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.join,
+.link,
+.node rect {
+  fill: none;
+}
+
+.link {
+  stroke: #969696;
+}
+
+.node rect {
+  fill: white;
+}
+rect,
+text,
+.link path,
+.join {
+  -webkit-transition: all 500ms linear;
+  -moz-transition: all 500ms linear;
+  -ms-transition: all 500ms linear;
+  -o-transition: all 500ms linear;
+  transition: all 500ms linear;
+}
+
+.node .task rect {
+  fill: #03A9F4;
+  stroke: none;
+}
+
+.node .stack rect {
+  fill: #eeeeee;
+}
+
+.node .data rect {
+  stroke: #3182bd;
+}
+
+.node .datum rect {
+  fill: #d9d9d9;
+  stroke: none;
+}
+
+.node text {
+  fill: #4F5656;
+}
+
+.node .task text.name {
+  fill: #f0f0f0;
+}
+
+.node .history rect {
+  fill: #1DE9B6;
+  stroke: none;
+}
+
+.link .to-history,
+.join {
+  stroke: #a1d99b;
+}
+
+.join {
+  stroke-dasharray: 2,2;
+}
+
+.link .to-history {
+  stroke-dasharray: .5,3.5;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.link .from-data {
+  stroke: #3182bd;
+}
+
+.root,
+.from-root {
+  display: none;
+}
+
+.node .history rect.focused {
+  fill: #FFEB3B;
+}
+
+code span {
+  -webkit-transition: background 250ms linear;
+  -moz-transition: background 250ms linear;
+  -ms-transition: background 250ms linear;
+  -o-transition: background 250ms linear;
+  transition: background 250ms linear;
+}
