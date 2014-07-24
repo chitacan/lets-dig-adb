@@ -549,6 +549,17 @@ $ adb connect localhost:6666
         },
       ]
     });
+
+    // Video Control
+    Reveal.addEventListener('slidechanged', function(event) {
+      var prev = event.previousSlide;
+      var curr = event.currentSlide;
+      var pVideo = !!prev ? prev.querySelector('video') : false;
+      var cVideo = !!curr ? curr.querySelector('video') : false;
+
+      if (pVideo) pVideo.pause();
+      if (cVideo) cVideo.play();
+    });
   </script>
 </body>
 </html>
