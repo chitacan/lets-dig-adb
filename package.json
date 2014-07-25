@@ -3,7 +3,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "grunt install"
+    "install": "bower install; grunt install;"
   },
   "author": "chitacan",
   "license": "BSD-2-Clause",
