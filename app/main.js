@@ -45,6 +45,9 @@ app.on('ready', function() {
       label: 'Paste',
       accelerator: 'Command+V',
       selector: 'paste:'
+    },{
+      label: 'Enter Fullscreen',
+      click: function() { win.setFullScreen(true); }
     }]
   }];
   menu = Menu.buildFromTemplate(menu_tmpl);
