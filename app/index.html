@@ -132,7 +132,7 @@
         </section>
 
         <section>
-          <h2>나만의 도구로 확장하기 쉽다.</h2>
+          <h2>나만의 도구로 만들기</h2>
           <pre><code class="javascript" style="max-height:300px;">
     var net = require('net');
     var cmds = [{
@@ -262,20 +262,13 @@
 
         <section>
           <h2>호스트 / 로컬 서비스</h2>
+          <p><a href="https://android.googlesource.com/platform/system/core/+/android-4.4.4_r1/adb/SERVICES.TXT">SERVICES.TXT</a></p>
           <ul>
-            <li>호스트 서비스 : adb server 에서 실행되는 명령어(adb device, forward)</li>
-            <li>로컬 서비스 : adbd 에서 실행되는 명령어(adb shell), 호스트 서비스 transport가 성공된 이후에 </li>
+            <li>호스트 서비스 : adb server 에서 실행(adb device, forward)</li>
+            <li>로컬 서비스 : adbd 에서 실행(adb shell)</li>
+            <small style="margin-top: 10px;color: gray;">호스트 서비스인 transport 서비스가 성공된 이후에</small>
           </ul>
           <p>그림 추가</p>
-        </section>
-
-        <section>
-          <h2>transport</h2>
-          <p>호스트와 단말의 소켓을 연결하기</p>
-          <ul>
-            <li>transport 서비스</li>
-            <li>adb forward</li>
-          </ul>
         </section>
 
         <section>
@@ -285,7 +278,16 @@
         </section>
 
         <section>
-          <h2>adb forward</h2>
+          <h2>transport</h2>
+          <p>호스트와 단말의 소켓을 연결하기</p>
+          <ul>
+            <li>transport 서비스</li>
+            <li>forward 서비스</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>forward 서비스</h2>
           <p>지속적인 연결을 원한다면 사용합시다.</p>
           <p>adb forward tcp:6666 tcp:6666</p> 
         </section>
