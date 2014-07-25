@@ -43,7 +43,7 @@
       <section>
         <h2>About Me</h2>
         <ul>
-          <li><a href="https://github.com/chitacan">@chtacan</a></li>
+          <li><a href="https://github.com/chitacan">@chitacan</a></li>
           <li>android, node.js, github, chrome</li>
           <li>다양한 mobile & web tech</li>
           <li>how it works?</li>
@@ -84,6 +84,7 @@
 
       <section>
         <h2>시작하기 전에</h2>
+        <img src="img/pic_1.png" alt="" class="no-shadow"/>
       </section>
 
       <section class="stack">
@@ -117,7 +118,7 @@
 
         <section>
           <h2>원하는 결과를 즉시 확인</h2>
-          <pre><code class="java">
+          <pre><code>
     ActivityManager activityManager
                               = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
     List&lt;RunningTaskInfo&gt; info = activityManager.getRunningTasks(1);
@@ -230,12 +231,13 @@
 
         <section>
           <h2>adb 구성</h2>
+          <img src="img/pic_2.png" alt="" class="no-shadow" />
         </section>
 
         <section>
           <h2>특징</h2>
           <ul>
-            <li>adb client / server 는 하나의 바이너리</li>
+            <li>adb client / server 는 하나의 바이너리(adb)</li>
             <pre><code class="shell">
     # run server mode
     $ adb -P 5037 fork-server server
@@ -243,6 +245,7 @@
     $ adb devices
             </code></pre>
             <li>adb와 adbd 는 코드 베이스가 거의 같다.</li>
+            <li>adb server 는 다수의 adb client 와 adbd를 연결</li>
           </ul>
         </section>
 
@@ -256,8 +259,8 @@
         </section>
 
         <section>
-          <h1>프로토콜</h1>
-          <p>그림 추가</p>
+          <h2>프로토콜</h2>
+          <img src="img/pic_3.png" alt="" class="no-shadow" />
         </section>
 
         <section>
@@ -268,13 +271,14 @@
             <li>로컬 서비스 : adbd 에서 실행(adb shell)</li>
             <small style="margin-top: 10px;color: gray;">호스트 서비스인 transport 서비스가 성공된 이후에</small>
           </ul>
-          <p>그림 추가</p>
+          <img src="img/pic_4.png" alt="" class="no-shadow" />
         </section>
 
         <section>
           <h2>transport 서비스</h2>
           <p>다른 단말로 연결을 전환</p>
           <p>연결된 2대의 단말에 shell 명령어 실행하기</p>
+          <img src="img/pic_5.png" alt="" class="no-shadow" />
         </section>
 
         <section>
@@ -289,17 +293,17 @@
         <section>
           <h2>forward 서비스</h2>
           <p>지속적인 연결을 원한다면 사용합시다.</p>
-          <p>adb forward tcp:6666 tcp:6666</p> 
+          <img src="img/pic_6.png" alt="" class="no-shadow" />
         </section>
 
         <section>
           <h2>adb forward</h2>
           <p>다른 소켓으로 확장하기</p>
           <ul>
-            <li>localfilesystem</li>
-            <li>localabstract</li>
-            <li>localreserved</li>
-            <li>dev</li>
+            <li>localfilesystem (/sdcard/somefile)</li>
+            <li>localabstract (unix domain socket)</li>
+            <li>localreserved (/dev/socket/)</li>
+            <li>dev (character device)</li>
           </ul>
         </section>
 
@@ -308,7 +312,7 @@
           <p>단말과 호스트 머신의 연결 통로</p>
           <ul>
             <li>devtools & mobile chrome</li>
-            <li>android & android wear</li>
+            <li>debug android wear</li>
             <li>hierarchyviewer</li>
             <li>java debugger</li>
           </ul>
@@ -318,31 +322,36 @@
           <h2>devtools & mobile chrome</h2>
           <img src="img/remote-debug.png" alt="" class="no-shadow">
         </section>
+        <section>
+          <h2>devtools & mobile chrome</h2>
+          <img src="img/pic_7.png" alt="" class="no-shadow">
+          <pre><code class="shell">
+      $ adb shell cat /proc/net/unix | grep chrome
+      $ adb forward tcp:8000 localabstract:chrome_devtools_remote
+      $ telnet localhost 8000
+      GET /json HTTP/1.1
+          </code></pre>
+        </section>
 
         <section>
           <h2>android & android wear</h2>
+          <img src="img/pic_8.png" alt="" class="no-shadow">
         </section>
 
         <section>
           <h2>hierarchyviewer</h2>
+          <img src="img/pic_9.png" alt="" class="no-shadow">
         </section>
 
         <section>
           <h2>java debugger</h2>
+          <a href="https://android.googlesource.com/platform/system/core/+/android-4.4.4_r2/adb/jdwp_service.c">jdwp_service.c</a>
+          <img src="img/pic_10.png" alt="" class="no-shadow">
         </section>
-
         <section>
-          <h2>연결 살펴보기</h2>
-          <pre><code class="shell">
-      $ tcpdump -i lo0 -s0 -XA port 5037
-          </code></pre>
-          <pre><code class="shell">
-      $ adb shell cat /proc/net/unix | grep chrome
-      $ adb forward tcp:8000 localabstract:chrome_devtools_remote
-      $ telnet localhost:8000
-          </code></pre>
+          <h2>java debugger</h2>
+          <img src="img/pic_11.png" alt="" class="no-shadow">
         </section>
-
       </section>
 
       <section class="stack">
@@ -351,8 +360,8 @@
         </section>
 
         <section>
-          <h2>adb client / server 연결은 쉽게 확장할 수 있습니다.</h2>
-          <p>그림</p> 
+          <h2>adb client / server 확장</h2>
+          <p>5037 포트로 adb 프로토콜을 전송하면 됩니다.</p> 
           <ul>
             <li>adbkit</li>
             <li>ChromeADB</li>
@@ -362,7 +371,7 @@
 
         <section>
           <h2>adbkit</h2>
-          <p>adb를 node.js로 확장합시다.</p>
+          <p>adb client를 node.js로 구현</p>
           <pre><code class="javascript">
     var adb = require('adbkit')
     var client = adb.createClient()
@@ -392,7 +401,16 @@
 
         <section id="demo">
           <h2>activitykit</h2>
+          <p><a href="https://github.com/chitacan/atom-shell-activitykit">https://github.com/chitacan/atom-shell-activitykit</a></p>
           <div id="status"></div>
+        </section>
+
+        <section>
+          <h2>ADB Server / adbd 연결 확장</h2>
+          <ul>
+            <li>USB 연결없이 단말과 통신하기</li>
+            <li>원격지의 단말에 연결하기</li>
+          </ul>
         </section>
 
         <section>
@@ -409,11 +427,7 @@
         <section>
           <h2>adb connect?</h2>
           <p>adb server와 adbd 연결하기</p> 
-        </section>
-
-        <section>
-          <h2>SSH Local Port Forwarding</h2>
-          <p>ssh 를 사용해 로컬의 포트와 서버의 포트를 연결하자</p>
+          <img src="img/pic_12.png" alt="" class="no-shadow">
         </section>
 
         <section>
@@ -421,24 +435,21 @@
           <p>다른 pc에 연결된 단말의 adbd에 접근할 수 있을까?</p>
           <pre><code class="shell">
     # on pc A
-    $ adb tcpip 6666
-    $ adb forward tcp:6666 tcp:6666
+    $ adb tcpip 8888
+    $ adb forward tcp:7777 tcp:8888
     # on pc B
-    $ ssh -L 6666:localhost:6666 &lt;IP_ADDRESS_A&gt; -N
+    $ ssh -L 6666:localhost:7777 &lt;IP_ADDRESS_A&gt; -N
     $ adb connect localhost:6666
           </code></pre>
+          <img src="img/pic_13.png" alt="" class="no-shadow">
         </section>
 
         <section>
-          <h2>ADB over local network</h2>
-          <p>다른 pc에 연결된 단말의 adb server에 접근하기</p>
-          <pre><code class="shell">
-    # on pc B
-    $ adb kill-server
-    $ ssh -L 5037:localhost:5037 &lt;IP_ADDRESS_A&gt; -N
-    $ adb connect localhost:6666
+          <h2>SSH Local Port Forwarding</h2>
+          <p>ssh 를 사용해 로컬의 포트와 서버의 포트를 연결하자</p>
+          <pre><code>
+    ssh -L &lt;local port&gt;:&lt;remote computer&gt;:&lt;remote port&gt; &lt;user&gt;@&lt;remote ip&gt;
           </code></pre>
-          <p>디버거는 사용불가...</p>
         </section>
 
         <section>
@@ -450,12 +461,13 @@
         <section>
           <h2>ADB over internet</h2>
           <pre><code class="shell">
-# on pc A
-$ . build/envsetup.sh && emulator
-# on pc B
-$ ssh -L 5555:localhost:6666 chitacan@chitacan.dlinkddns.com -p 2020 -N
-$ adb connect localhost:6666
+  # on pc A
+  $ . build/envsetup.sh && emulator
+  # on pc B
+  $ ssh -L 6666:localhost:5555 chitacan@chitacan.dlinkddns.com -p 2020 -N
+  $ adb connect localhost:6666
           </code></pre>
+          <img src="img/pic_14.png" alt="" class="no-shadow">
         </section>
 
         <section>
@@ -488,8 +500,11 @@ $ adb connect localhost:6666
 
       <section>
         <h2>한가지 더</h2>
-        <p>This presentation is fully Hackable !!</p>
+        <p>This presentation is fully hackable !!</p>
+        <p>
         <a href="https://github.com/chitacan/lets-dig-adb">https://github.com/chitacan/lets-dig-adb</a>
+        </p>
+        <small style="color:darkgray;">Node.js, Atom-Shell, Reveal.js, D3.js</small>
       </section>
 
      <section>
