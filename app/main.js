@@ -10,7 +10,9 @@ app.on('ready', function() {
   win = new BW({
     width  : size.width,
     height : size.height,
-    frame: false
+    frame: false,
+    show: true,
+    title: 'ADB'
   });
 
   win.on('closed', function() {
@@ -21,7 +23,7 @@ app.on('ready', function() {
   win.show();
 
   var menu_tmpl = [{
-    lable: 'Atom Shell',
+    lable: 'ADB',
     submenu: [{
       label: 'reload',
       accelerator: 'Command+R',

@@ -146,7 +146,6 @@ function activityDemo() {
   }
 
   function update() {
-    console.log('updated');
     activitykit.getActivityInfo()
     .then(function(stream) {
       stream.on('data', function(data) {
