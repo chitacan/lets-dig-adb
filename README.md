@@ -11,3 +11,7 @@ Clone this repo and run following commands.
 $ npm install
 $ grunt
 ```
+
+# activitykit demo
+
+activitykit demo needs real android device or emulator. If you have neither, [genymotion](http://www.genymotion.com/) will be a neat solution.
