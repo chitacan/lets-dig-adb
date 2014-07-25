@@ -5,10 +5,15 @@ function activityDemo() {
   var anchor = document.querySelector('#demo')
     , parent = anchor.parentElement || window
     , MARGIN = {top: 5, right: 40, bottom: 5, left: 40}
-    , width  = parent.clientWidth  || parent.innerWidth
-    , height = parent.clientHeight || parent.innerHeight
+    //, width  = parent.clientWidth  || parent.innerWidth
+    //, height = parent.clientHeight || parent.innerHeight
     , duration = 750
     , step   = 100;
+
+  var maxWidth  = 900
+    , maxHeight = 600
+    , width  = Math.min(window.innerWidth,  maxWidth)
+    , height = Math.min(window.innerHeight, maxHeight)
 
   var statusInfo = d3.select('#status');
   var tree = d3.layout.tree()
@@ -141,6 +146,7 @@ function activityDemo() {
   }
 
   function update() {
+    console.log('updated');
     activitykit.getActivityInfo()
     .then(function(stream) {
       stream.on('data', function(data) {
@@ -156,8 +162,7 @@ function activityDemo() {
   }
 
   function onResize() {
-    var h = window.innerHeight - MARGIN.top - MARGIN.bottom;
-    var w = window.innerWidth  - MARGIN.left - MARGIN.right;
+    var h = Math.min(window.innerHeight, maxHeight) - MARGIN.top - MARGIN.bottom;
     svg.attr("height", h)
 
     tree.size([h, 1])
@@ -183,15 +188,8 @@ function activityDemo() {
   }
 }
 
+var demo  = activityDemo();
 Reveal.addEventListener('slidechanged', function(event) {
   var isDemo = event.currentSlide.id === 'demo';
-  var demo;
-
-  if (isDemo) {
-    demo = activityDemo();
-    demo.start();
-  } else {
-    !demo || demo.stop();
-  }
-
+  isDemo ? demo.start() : demo.stop();
 });
