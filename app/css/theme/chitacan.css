@@ -4,6 +4,10 @@
 */
 @import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
 @font-face {
+  font-family: 'dejavu' ;
+  src: url("../../lib/font/dejavu.ttf") format("truetype");
+}
+@font-face {
   font-family: 'NanumBarunGothic' ;
   src: url("../../lib/font/NanumBarunGothic.ttf") format("truetype");
 }
@@ -181,5 +185,5 @@ body {
 }
 
 .reveal code {
-  font-family: "DejaVu Sans Mono";
+  font-family: "dejavu";
 }
