@@ -117,10 +117,11 @@
 
         <section>
           <h2>원하는 결과를 즉시 확인</h2>
-          <pre><code class="shell">
-ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-List&lt;RunningTaskInfo&gt; info = activityManager.getRunningTasks(1);
-ComponentName topActivity = info.get(0).topActivity;
+          <pre><code class="java">
+    ActivityManager activityManager
+                              = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+    List&lt;RunningTaskInfo&gt; info = activityManager.getRunningTasks(1);
+    ComponentName topActivity = info.get(0).topActivity;
           </code></pre>
           <video src="img/instant.webm" controls></video>
         </section>
@@ -229,7 +230,6 @@ ComponentName topActivity = info.get(0).topActivity;
 
         <section>
           <h2>adb 구성</h2>
-          <p>그림 추가</p>
         </section>
 
         <section>
@@ -314,7 +314,7 @@ ComponentName topActivity = info.get(0).topActivity;
 
         <section>
           <h2>devtools & mobile chrome</h2>
-          <img src="img/remote-debug.png" alt="" style="box-shadow: none; ">
+          <img src="img/remote-debug.png" alt="" class="no-shadow">
         </section>
 
         <section>
