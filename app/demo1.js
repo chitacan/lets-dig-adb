@@ -189,6 +189,6 @@ function activityDemo() {
 
 var demo  = activityDemo();
 Reveal.addEventListener('slidechanged', function(event) {
-  var isDemo = event.currentSlide.id === 'demo';
+  var isDemo = event.currentSlide.id === 'demo-2';
   isDemo ? demo.start() : demo.stop();
 });
