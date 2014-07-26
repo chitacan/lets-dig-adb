@@ -295,6 +295,13 @@
           </ul>
         </section>
 
+        <section id="demo-1">
+          <h2>localabstract</h2>
+          <input type="text" />
+          <button>send</button>
+          <div id="result"></div>
+        </section>
+
         <section>
           <h2>이걸 어디에 사용하고 있을까요?</h2>
           <p>단말과 호스트 머신의 연결 통로</p>
@@ -387,7 +394,7 @@
           </small>
         </section>
 
-        <section id="demo">
+        <section id="demo-2">
           <h2>activitykit</h2>
           <p><a href="https://github.com/chitacan/atom-shell-activitykit">https://github.com/chitacan/atom-shell-activitykit</a></p>
           <div id="status"></div>
@@ -547,7 +554,14 @@
           }
         },
         { 
-          src: 'demo1.js',
+          src: 'demo-1.js',
+          async: true, 
+          condition: function() {
+            return typeof module !== 'undefined'
+          }
+        },
+        { 
+          src: 'demo-2.js',
           async: true, 
           condition: function() {
             return typeof module !== 'undefined'
