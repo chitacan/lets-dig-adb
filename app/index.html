@@ -297,7 +297,7 @@
 
         <section id="demo-1">
           <h2>localabstract</h2>
-          <input type="text" />
+          <input type="text" id="demo-input"/>
           <button>send</button>
           <div id="result"></div>
         </section>
@@ -459,7 +459,7 @@
   # on pc A
   $ . build/envsetup.sh && emulator
   # on pc B
-  $ ssh -L 6666:localhost:5555 chitacan@chitacan.dlinkddns.com -p 2020 -N
+  $ ssh -L 6666:localhost:5555 vagrant@chitacan.dlinkddns.com -p 2020 -N
   $ adb connect localhost:6666
           </code></pre>
           <img src="img/pic_14.png" alt="" class="no-shadow">

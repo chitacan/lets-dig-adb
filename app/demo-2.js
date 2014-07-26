@@ -2,7 +2,7 @@ var d3 = require('./lib/bower_components/d3/d3.js');
 var activitykit = require('activitykit');
 
 function activityDemo() {
-  var anchor = document.querySelector('#demo')
+  var anchor = document.querySelector('#demo-2')
     , parent = anchor.parentElement || window
     , MARGIN = {top: 5, right: 40, bottom: 5, left: 40}
     //, width  = parent.clientWidth  || parent.innerWidth

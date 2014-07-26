@@ -1,7 +1,7 @@
 
 var net = require('net');
 
-function sendMsg(msg, cb) {
+function sendMsg(msg, el, cb) {
   var callback = cb;
   var cmds = [{
     cmd : 'host:transport-any',
@@ -48,6 +48,7 @@ function sendMsg(msg, cb) {
     this.on('data', function(chunk) {
       var res = chunk.toString();
       console.log(res);
+      el.innerText = res;
       this.writeNext(res);
     });
     this.on('drain', function() {
@@ -75,6 +76,18 @@ function sendMsg(msg, cb) {
 
 var sender;
 Reveal.addEventListener('slidechanged', function(event) {
+  var isDemo = event.currentSlide.id === 'demo-1';
+  if (isDemo) {
+    var res  = document.querySelector('#result');
+    var btn  = document.querySelector('button');
+    var input = document.querySelector('#demo-input');
+    sender = sendMsg('hello', res);
+    btn.addEventListener('click', function() {
+      console.log(input.value);
+      sender.write(input.value);
+    });
+  } else {
+    if (sender) sender.end();
+  }
 
-  sender = sendMsg('hello', function());
 });
