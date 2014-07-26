@@ -47,19 +47,7 @@
           <li>android, node.js, github, chrome</li>
           <li>다양한 mobile & web tech</li>
           <li>how it works?</li>
-          <li>내가 원하는 것을 만들 수 있는 능력</li>
           <li>Ahnlab</li>
-        </ul>
-      </section>
-
-      <section>
-        <p>안드로이드 앱을 개발한다구요?</p>
-        <h2>그럼 ADB 쓰시는 겁니다.</h2>
-        <ul>
-          <li>로그 가져오기</li>
-          <li>디버거 연결하기</li>
-          <li>앱 설치하기</li>
-          <li>쉘에 붙어보기</li>
         </ul>
       </section>
 
@@ -89,7 +77,7 @@
 
       <section class="stack">
         <section>
-          <h1>adb ?</h1>
+          <h1>ADB ?</h1>
           <p>Android Debug Bridge</p>
           <ul>
             <li>개발 머신과 안드로이드 기반의 단말을 연결</li>
@@ -124,16 +112,16 @@
     List&lt;RunningTaskInfo&gt; info = activityManager.getRunningTasks(1);
     ComponentName topActivity = info.get(0).topActivity;
           </code></pre>
-          <video src="img/instant.webm" controls></video>
+          <video src="img/instant.webm" controls loop></video>
         </section>
 
         <section>
           <h2>텍스트 기반</h2>
-          <video src="img/multi.webm" controls></video>
+          <video src="img/multi.webm" controls loop></video>
         </section>
 
         <section>
-          <h2>나만의 도구로 만들기</h2>
+          <h2>나만의 도구 만들기</h2>
           <pre><code class="javascript" style="max-height:300px;">
     var net = require('net');
     var cmds = [{
@@ -277,7 +265,7 @@
         <section>
           <h2>transport 서비스</h2>
           <p>다른 단말로 연결을 전환</p>
-          <p>연결된 2대의 단말에 shell 명령어 실행하기</p>
+          <small style="color:darkgray;">연결된 2대의 단말에 shell 명령어 실행하기</small>
           <img src="img/pic_5.png" alt="" class="no-shadow" />
         </section>
 
@@ -455,7 +443,7 @@
         <section>
           <h2>Crazy Connect</h2>
           <p>원격지 가상머신 속 에뮬레이터의 adbd에 접근할 수 있을까?</p>
-          <p>미친거 같지만, 되긴 됩니다</p>
+          <p>미친거 같지만, 되긴 됩니다. <img src="img/sparkles.png" class="emoji" /></p>
         </section>
 
         <section>
