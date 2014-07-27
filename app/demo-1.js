@@ -20,6 +20,15 @@ function sendMsg(msg, el, cb) {
     return prefix.concat(cmd);
   }
 
+  function updateResult(res) {
+    var status = res.slice(0, 4);
+    if (status === 'OKAY') {
+      el.innerText = res.slice(8);
+    } else {
+      el.innerText = status;
+    }
+  }
+
   var socket = new net.Socket({
     readable : true,
     writable : true,
@@ -34,6 +43,7 @@ function sendMsg(msg, el, cb) {
     }
 
     this.expect = data.expect;
+    console.log('sending : ' + prefixLen(data.cmd));
     this.write(prefixLen(data.cmd));
   }
 
@@ -47,8 +57,8 @@ function sendMsg(msg, el, cb) {
     this.writeData();
     this.on('data', function(chunk) {
       var res = chunk.toString();
+      updateResult(res);
       console.log(res);
-      el.innerText = res;
       this.writeNext(res);
     });
     this.on('drain', function() {
@@ -75,17 +85,20 @@ function sendMsg(msg, el, cb) {
 }
 
 var sender;
+var btn  = document.querySelector('button');
+btn.addEventListener('click', function() {
+  var input = document.querySelector('#demo-input');
+  var msg   = input.value;
+  if (!msg.length) return;
+  if (sender)
+    sender.write(msg);
+});
+
 Reveal.addEventListener('slidechanged', function(event) {
   var isDemo = event.currentSlide.id === 'demo-1';
   if (isDemo) {
     var res  = document.querySelector('#result');
-    var btn  = document.querySelector('button');
-    var input = document.querySelector('#demo-input');
     sender = sendMsg('hello', res);
-    btn.addEventListener('click', function() {
-      console.log(input.value);
-      sender.write(input.value);
-    });
   } else {
     if (sender) sender.end();
   }
