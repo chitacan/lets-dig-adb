@@ -1,17 +1,14 @@
 
 var net = require('net');
 
-function sendMsg(msg, el, cb) {
+function sendMsg(el, cb) {
   var callback = cb;
   var cmds = [{
     cmd : 'host:transport-any',
-    expect : function(res) { return 'OKAY' === res; }
+    expect : function(res) { return 'OKAY' === res.slice(0,4); }
   }, {
     cmd : 'localabstract:chitacan_remote',
-    expect : function(res) { return 'OKAY' === res; }
-  }, {
-    cmd : msg,
-    expect : function(res) { return true; }
+    expect : function(res) { return 'OKAY' === res.slice(0,4); }
   }]
 
   function prefixLen(cmd) {
@@ -67,6 +64,9 @@ function sendMsg(msg, el, cb) {
     this.on('end', function() {
       console.log('FIN');
     });
+    this.on('close', function() {
+      console.log('close');
+    });
   });
 
   socket.writeMsg = function(msg, cb) {
@@ -86,19 +86,27 @@ function sendMsg(msg, el, cb) {
 
 var sender;
 var btn  = document.querySelector('button');
-btn.addEventListener('click', function() {
-  var input = document.querySelector('#demo-input');
+var input = document.querySelector('#demo-input');
+
+function handleEvent() {
   var msg   = input.value;
   if (!msg.length) return;
   if (sender)
     sender.write(msg);
+
+  input.value = '';
+}
+
+btn.addEventListener('click', handleEvent);
+input.addEventListener('keypress', function(e) {
+  if (e.keyCode === 13) handleEvent();
 });
 
 Reveal.addEventListener('slidechanged', function(event) {
   var isDemo = event.currentSlide.id === 'demo-1';
   if (isDemo) {
     var res  = document.querySelector('#result');
-    sender = sendMsg('hello', res);
+    sender = sendMsg(res);
   } else {
     if (sender) sender.end();
   }
