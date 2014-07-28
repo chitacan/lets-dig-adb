@@ -19,9 +19,17 @@ $ npm install
 $ grunt
 ```
 
-## activitykit demo
+## Demo
 
-activitykit demo needs real android device or emulator. If you have neither, [genymotion](http://www.genymotion.com/) will be a neat solution.
+This presentation has 2 demo slides. You can show them without leaving them. You need to connect real android device or emulator on your machine. If you have neither, [genymotion](http://www.genymotion.com/) will be a neat solution.
+
+## Demo #1 (localabstract)
+
+Install [localabstract-server-demo](https://github.com/chitacan/localabstract-server-demo) on your android device or emulator.
+
+## Demo #2 (activitykit)
+
+Just connect your android device or emulator, and lauch some apps.(It just works!! :smiley:)
 
 ## Trouble Shooting
 
