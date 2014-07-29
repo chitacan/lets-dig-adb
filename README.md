@@ -12,7 +12,7 @@ Download [release](https://github.com/chitacan/lets-dig-adb/releases), run follo
 
 ## Demo
 
-This presentation has 2 demo slides. You can show them without leaving them. You need to connect real android device or emulator on your machine. If you have neither, [genymotion](http://www.genymotion.com/) will be a neat solution.
+This presentation has 2 demo slides. You can see them without leaving presentation. You need to connect real android device or emulator on your machine. If you have neither, [genymotion](http://www.genymotion.com/) will be a neat solution.
 
 ### Demo #1 (localabstract)
 
