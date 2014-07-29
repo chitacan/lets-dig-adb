@@ -37,27 +37,7 @@ module.exports = function(grunt) {
     'run'
   ]);
   
-  grunt.registerTask('init', 'initialize project', function() {
-    var cwd     = process.cwd()
-      , appPath = path.join(cwd, 'app')
-      , gitPath = path.join(cwd, '.git')
-
-    if (grunt.file.exists(appPath))
-      return;
-    
-    fs.readdirSync(cwd).forEach(function(file) {
-      if (file.charAt(0) !== '_') return;
-      
-      var src = path.join(cwd, file);
-      var dst = path.join(appPath, file.slice(1))
-      grunt.file.copy(src, dst);
-      grunt.file.delete(src)
-    });
-    grunt.file.delete(gitPath);
-  })
-  
   grunt.registerTask('install', [
-    'init',
     'download-atom-shell'
   ]);
   
@@ -70,6 +50,7 @@ module.exports = function(grunt) {
       grunt.task.run('shell:linux')
   });
   grunt.registerTask('dist', function() {
+    grunt.task.run('download-atom-shell');
     if (process.platform === 'darwin')
       grunt.task.run('shell:distMac');
     else if (process.platform === 'win32')
