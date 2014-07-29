@@ -36,3 +36,4 @@ Session.vim
 *~
 binaries
 app/lib/bower_components
+dist
