@@ -21,8 +21,8 @@ You can send a message to demo application.
 
 ### Demo #2 (activitykit)
 
-Just connect your android device or emulator, and lauch some apps.(It just works!! :smiley:)
-If you want see more detail about this, see [atom-shell-activitykit](https://github.com/chitacan/atom-shell-activitykit) or [activitykit](https://github.com/chitacan/activitykit).
+Connect your android device or emulator, and fire up `adb server`.  Whenever you launch some apps, you can see whole activity stack. :smiley:
+If you want see more detail about this project, see [atom-shell-activitykit](https://github.com/chitacan/atom-shell-activitykit) or [activitykit](https://github.com/chitacan/activitykit).
 
 ## Trouble Shooting
 
