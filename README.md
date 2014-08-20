@@ -1,6 +1,6 @@
 # Let's Dig ADB (Android Debug Bridge)
 
-GDG Korea Android Conf 2014 presentation.
+GDG Korea Android Conf 2014 presentation(watch video on [here](http://www.youtube.com/watch?v=BTFuVx2FhtQ)).
 Based on [Reveal.js](https://github.com/hakimel/reveal.js/) & [Atom-Shell](https://github.com/atom/atom-shell)
 
 ## Run
